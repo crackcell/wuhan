@@ -1,0 +1,12 @@
+language: c
+
+compiler: gcc
+
+before_install:
+    - sudo apt-get install libcunit1-dev
+
+script:
+    - make test
+
+notifications:
+    email: false

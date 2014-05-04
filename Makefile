@@ -11,7 +11,7 @@
 
 include Makefile.env
 
-.PHONY : all output clean help
+.PHONY : all output clean check test help
 
 all : output
 
@@ -24,6 +24,9 @@ clean :
 	rm -rf output
 	make clean -C src
 	make clean -C test
+
+test : all
+	make test -C test
 
 check : all
 	make check -C test
