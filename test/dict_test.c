@@ -79,8 +79,8 @@ void test_put() {
   tmpl.key = 13;
   tmpl.value = 13;
   dict_put(int_dict, &tmpl);
-  dict_debugstring(int_dict);
-  printf("================\n");
+  //dict_debugstring(int_dict);
+  //printf("================\n");
 }
 
 void test_get() {
@@ -89,9 +89,7 @@ void test_get() {
   struct dict_item* item;
   tmpl.key = 1;
   item = (struct dict_item*)dict_get(int_dict, &tmpl);
-  printf("{%d:%d}\n", item->key, item->value);
-
-  printf("================\n");
+  CU_ASSERT(1 == item->value);
 }
 
 void test_remove() {
@@ -99,9 +97,9 @@ void test_remove() {
 
   tmpl.key = 1;
   dict_remove(int_dict, &tmpl);
-  dict_debugstring(int_dict);
 
-  printf("================\n");
+  struct dict_item* item = (struct dict_item*)dict_get(int_dict, &tmpl);
+  CU_ASSERT(NULL == item);
 }
 
 int main(int argc, char *argv[]) {
@@ -118,7 +116,8 @@ int main(int argc, char *argv[]) {
   }
 
   if ((NULL == CU_add_test(suite, "test of dict_put()", test_put)) ||
-      (NULL == CU_add_test(suite, "test of dict_get()", test_get))) {
+      (NULL == CU_add_test(suite, "test of dict_get()", test_get)) ||
+      (NULL == CU_add_test(suite, "test of dict_remove()", test_remove))) {
     CU_cleanup_registry();
     return CU_get_error();
   }

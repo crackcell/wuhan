@@ -38,15 +38,14 @@ int clean_suite() {
 
 void test_load() {
   wh_conf_load(conf, "test.conf");
-  dict_debugstring((dict_t*)(conf->dict));
 }
 
 void test_get_int() {
-  printf("{int key:%d}\n", wh_conf_get_int(conf, "int key"));
+  CU_ASSERT(10 == wh_conf_get_int(conf, "int key"));
 }
 
 void test_get_str() {
-  printf("{trim key4:%s}\n", wh_conf_get_str(conf, "trim key4"));
+  CU_ASSERT(0 == strcmp("trim value4", wh_conf_get_str(conf, "trim key4")))
 }
 
 int main(int argc, char *argv[]) {

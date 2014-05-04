@@ -148,8 +148,8 @@ int wh_conf_load(wh_conf_t* conf, const char* path) {
     key = trim(trimmed);
     value = trim(delim + 1);
 
-    printf("key: [%s]\n", key);
-    printf("value: [%s]\n", value);
+    //printf("key: [%s]\n", key);
+    //printf("value: [%s]\n", value);
 
     struct dict_item tmpl;
     tmpl.key = key;
