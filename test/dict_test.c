@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <CUnit/Basic.h>
+
 #include <dict.h>
 
 struct dict_item {
@@ -53,12 +55,21 @@ dict_func_t int_dict_func = {.hash = int_dict_hash,
                              .alloc = int_dict_alloc,
                              .free = int_dict_free};
 
-int main(int argc, char *argv[]) {
-  dict_t* int_dict = dict_new("test", 1, int_dict_func);
+static dict_t* int_dict = NULL;
 
+int init_suite() {
+  int_dict = dict_new("test", 1, int_dict_func);
+  return int_dict == NULL ? -1 : 0;
+}
+
+int clean_suite() {
+  dict_delete(int_dict);
+  return 0;
+}
+
+void test_put() {
   struct dict_item tmpl;
 
-  // 1. Put
   tmpl.key = 1;
   tmpl.value = 1;
   dict_put(int_dict, &tmpl);
@@ -70,27 +81,52 @@ int main(int argc, char *argv[]) {
   dict_put(int_dict, &tmpl);
   dict_debugstring(int_dict);
   printf("================\n");
+}
 
-  // 2. Get
+void test_get() {
+  struct dict_item tmpl;
+
   struct dict_item* item;
   tmpl.key = 1;
   item = (struct dict_item*)dict_get(int_dict, &tmpl);
   printf("{%d:%d}\n", item->key, item->value);
 
   printf("================\n");
+}
 
-  // 3. Delete key
+void test_remove() {
+  struct dict_item tmpl;
+
   tmpl.key = 1;
   dict_remove(int_dict, &tmpl);
   dict_debugstring(int_dict);
 
   printf("================\n");
+}
 
-  // 4. Rehash
+int main(int argc, char *argv[]) {
+  CU_pSuite suite = NULL;
 
-  dict_delete(int_dict);
+  if (CUE_SUCCESS != CU_initialize_registry()) {
+    return CU_get_error();
+  }
 
-  return 0;
+  suite = CU_add_suite("suite", init_suite, clean_suite);
+  if (suite == NULL) {
+    CU_cleanup_registry();
+    return CU_get_error();
+  }
+
+  if ((NULL == CU_add_test(suite, "test of dict_put()", test_put)) ||
+      (NULL == CU_add_test(suite, "test of dict_get()", test_get))) {
+    CU_cleanup_registry();
+    return CU_get_error();
+  }
+
+  CU_basic_set_mode(CU_BRM_VERBOSE);
+  CU_basic_run_tests();
+  CU_cleanup_registry();
+  return CU_get_error();
 }
 
 /* vim: set expandtab shiftwidth=2 tabstop=2: */

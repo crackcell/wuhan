@@ -12,7 +12,7 @@
 include ../Makefile.env
 
 INC = -I../include -I../src
-LIB = -lpthread
+LIB = -lpthread -lcunit
 ifeq ($(OS), Linux)
 	LIB += -lm
 endif
