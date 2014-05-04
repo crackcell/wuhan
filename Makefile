@@ -18,7 +18,6 @@ all : output
 output :
 	mkdir -p output
 	make -C src
-	make -C test
 
 clean :
 	rm -rf output

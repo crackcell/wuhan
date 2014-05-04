@@ -22,6 +22,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
+
 #include "fault.h"
 #include "dict.h"
 
@@ -235,9 +238,9 @@ void dict_debugstring(dict_t* dict) {
     }
     while (b != NULL) {
       if (dict->func.debugstring != NULL) {
-        printf("%lu={%s}, ", b->hvalue, dict->func.debugstring(b->data));
+        printf("%" PRId64 "={%s}, ", b->hvalue, dict->func.debugstring(b->data));
       } else {
-        printf("%lu={}, ", b->hvalue);
+        printf("%" PRId64 "={}, ", b->hvalue);
       }
       b = b->next;
     }
