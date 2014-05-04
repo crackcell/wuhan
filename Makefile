@@ -25,6 +25,7 @@ clean :
 	make clean -C test
 
 test : all
+	make -C test
 	make test -C test
 
 check : all
