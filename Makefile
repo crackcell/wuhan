@@ -29,6 +29,7 @@ test : all
 	make test -C test
 
 check : all
+	make -C test
 	make check -C test
 
 help :
