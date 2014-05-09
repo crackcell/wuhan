@@ -19,13 +19,50 @@
  **/
 
 #include <stdio.h>
+#include <string.h>
+#include <inttypes.h>
+
+#include <CUnit/Basic.h>
+
 #include <utils.h>
 
-int main(int argc, char *argv[]) {
+int init_suite() { return 0; }
+
+int clean_suite() { return 0; }
+
+void test_trim() {
   char line[] = "  this is a test  ";
   char* p = trim(line);
-  printf("[%s]\n", p);
-  return 0;
+  CU_ASSERT(strcmp(p, "this is a test") == 0);
+}
+
+void test_ms_since_epoch() {
+  printf("ms_since_epoch: %" PRId64 "\n", ms_since_epoch());
+}
+
+int main(int argc, char *argv[]) {
+  CU_pSuite suite = NULL;
+
+  if (CUE_SUCCESS != CU_initialize_registry()) {
+    return CU_get_error();
+  }
+
+  suite = CU_add_suite("suite", init_suite, clean_suite);
+  if (suite == NULL) {
+    CU_cleanup_registry();
+    return CU_get_error();
+  }
+
+  if ((NULL == CU_add_test(suite, "test of trim()", test_trim)) ||
+      (NULL == CU_add_test(suite, "test of ms_since_epoch()", test_ms_since_epoch))) {
+    CU_cleanup_registry();
+    return CU_get_error();
+  }
+
+  CU_basic_set_mode(CU_BRM_VERBOSE);
+  CU_basic_run_tests();
+  CU_cleanup_registry();
+  return CU_get_error();
 }
 
 /* vim: set expandtab shiftwidth=2 tabstop=2: */

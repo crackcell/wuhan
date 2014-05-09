@@ -22,9 +22,11 @@
  **/
 
 #include <string.h>
+#include <stdint.h>
 #include <ctype.h>
+#include <sys/time.h>
 
-char* trim(char* str) {
+inline char* trim(char* str) {
   char *end;
 
   // Trim leading space
@@ -41,6 +43,12 @@ char* trim(char* str) {
   *(end+1) = 0;
 
   return str;
+}
+
+inline int64_t ms_since_epoch() {
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
 #endif /* _UTIL_H_ */
